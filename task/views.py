@@ -8,7 +8,7 @@ from django.template import Context, loader
 
 def index(request):
     host_list = Host.objects.order_by('-host_name')[:10]
-    template = loader.get_template('task/index.html')
+    template = loader.get_template('index.html')
     context = Context({
         'host_list': host_list,
 
@@ -18,7 +18,7 @@ def index(request):
 def host(request,*args, **kwargs):
     id = args
     details_list = HostDetails.objects.filter(detail_host_id='%s' % id)[:10]
-    template = loader.get_template('task/details.html')
+    template = loader.get_template('details.html')
     context = Context({
         'details_list': details_list,
     })
@@ -26,7 +26,7 @@ def host(request,*args, **kwargs):
 
 
 def create_host(request):
-    template = loader.get_template('task/host.html')
+    template = loader.get_template('host.html')
     context = Context({
 
     })

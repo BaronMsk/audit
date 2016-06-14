@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
+    <title>Audit</title>
 
     <!-- Bootstrap core CSS -->
     {% load staticfiles %}
@@ -42,8 +42,8 @@
         </div>
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="/">Home</a></li>
-            <li class="active"><a href="create_host">Create host</a></li>
+            <li class="active"><a href="../">Home</a></li>
+            <li class="active"><a href="../create_host">Create host</a></li>
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -52,28 +52,9 @@
     <div class="container">
 
       <div class="starter-template">
-        {% if host_list %}
-        <table class="table table-hover">
-          <thead>
-          <tr>
-            <th>Host name</th>
-            <th>IP address</th>
-            <th>Date</th>
-          </tr>
-          </thead>
-            <tbody>
-          {% for host in host_list %}
-            <tr>
-              <td><a href="/host/{{host.pk}}">{{host.host_name}}</a></td>
-              <td><a href="/host/{{host.pk}}">{{host.host_address}}</a></td>
-              <td>{{host.host_data_create}}</td>
-            </tr>
-        {% endfor %}
-          </tbody>
-        </table>        
-        {% else %}
-        <p>No Host are available.</p>
-        {% endif %}
+        {% block index %}{% endblock %}
+        {% block detail %}{% endblock %}
+        {% block host %}{% endblock %}
       </div>
 
     </div><!-- /.container -->
