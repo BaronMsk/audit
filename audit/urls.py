@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$',  views.index, name='index'),
     url(r'^host/(\d+)',  views.host, name='host'),
-    url(r'^create_host', views.create_host, name='create_host'),
+    url(r'^create_host$', views.create_host, name='create_host'),
+    url(r'^add$', views.host_add, name='host_add'),
 ]

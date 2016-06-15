@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from task.models import Host, HostDetails
 from django.template import Context, loader
+from task.forms import HostF
 
 # Create your views here.
 
@@ -31,3 +32,15 @@ def create_host(request):
 
     })
     return HttpResponse(template.render(context))
+
+def host_add(request):
+    if request.method == 'POST':
+        form = HostF(request.POST)
+        if form.is_valid():
+            post = form.save()
+            return HttpResponseRedirect('../')
+        else:
+            form = HostF()
+        return render(request, '../', {
+            'HostF': HostF
+        })

@@ -1,7 +1,6 @@
 from __future__ import unicode_literals
 from django.db import models
-from django import forms
-import datetime
+
 
 # Create your models here.
 
@@ -16,7 +15,6 @@ class Host(models.Model):
     def get_absolute_url(self):
         return '/host/%d' % self.pk
 
-
 class HostDetails(models.Model):
     detail_content = models.TextField(max_length=65000)
     detail_host_id = models.TextField(max_length=20)
@@ -24,7 +22,5 @@ class HostDetails(models.Model):
     def __unicode__(self):
         return u"%s %s" % self.detail_data_audit, self.detail_content
 
-class HostF(forms.Form):
-    hostname = forms.CharField(max_length=100)
-    address = forms.CharField(max_length=15)
-    date_create = forms.DateField(initial=datetime.date.today)
+
+

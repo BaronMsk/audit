@@ -128,5 +128,5 @@ STATIC_URL = '/static/' # You may find this is already defined as such.
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
-    '/var/www/static/',
+    #'/var/www/static/',
 ]
