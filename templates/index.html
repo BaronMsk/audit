@@ -10,6 +10,7 @@
       <th>Date</th>
       <th>Type</th>
       <th>Status</th>
+      <th></th>
     </tr>
     </thead>
       <tbody>
@@ -19,7 +20,7 @@
         <td><a href="/host/{{host.pk}}">{{host.host_address}}</a></td>
         <td>{{host.host_data_create}}</td>
         <td>{{host.host_type}}</td>
-        <td>{{host.host_status}}</td>
+        <td>{{host.host_status}} <a href="./" ><span class="glyphicon glyphicon-remove" aria-hidden="true"> </span></a> <a href="./" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a> </td>
       </tr>
   {% endfor %}
     </tbody>
