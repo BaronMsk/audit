@@ -8,6 +8,8 @@
       <th>Host name</th>
       <th>IP address</th>
       <th>Date</th>
+      <th>Type</th>
+      <th>Status</th>
     </tr>
     </thead>
       <tbody>
@@ -16,6 +18,8 @@
         <td><a href="/host/{{host.pk}}">{{host.host_name}}</a></td>
         <td><a href="/host/{{host.pk}}">{{host.host_address}}</a></td>
         <td>{{host.host_data_create}}</td>
+        <td>{{host.host_type}}</td>
+        <td>{{host.host_status}}</td>
       </tr>
   {% endfor %}
     </tbody>
