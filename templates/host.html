@@ -9,6 +9,20 @@
       <label for="ipaddress">IP Address</label>
       <input type="text" class="form-control" name="ipaddress" placeholder="Enter IP Address" value="{{form.ipaddress}}">
    </fieldset>
+   <fieldset class="form-group">
+    <label for="exampleSelect1">OS</label>
+    <select class="form-control" name="hosttype">
+      <option>FreeBSD</option>
+      <option>Linux</option>
+    </select>
+   </fieldset>
+   <fieldset class="form-group">
+    <label for="exampleSelect1">Status</label>
+    <select class="form-control" name="hoststatus">
+      <option>enabled</option>
+      <option>desabled</option>
+    </select>
+   </fieldset>
    <button type="submit" class="btn btn-primary" >Submit</button>
 </form>
 {% endblock %}
