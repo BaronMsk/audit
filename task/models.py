@@ -13,7 +13,8 @@ class Host(models.Model):
     host_status = models.TextField(max_length=20)
 
     def __unicode__(self):
-        return u"%s %s %s %s %s %s" % self.host_name, self.host_address, self.host_type, self.host_status, self.host_data_create, self.pk
+        #return u"%s %s %s %s %s %s" % self.host_name, self.host_address, self.host_type, self.host_status, self.host_data_create, self.pk
+        return self.host_address
 
     def get_absolute_url(self):
         return '/host/%d' % self.pk
@@ -28,7 +29,11 @@ class Host(models.Model):
 
     def play(self, id):
         try:
-            HostDetails.objects.create(detail_content='test', detail_host_id='%s' % id)
+            ip = Host.objects.filter(pk='%s' % id).values('host_address')
+            ip = ip[0]['host_address']
+            print ip
+            data = get_info_freebsd(ip)
+            HostDetails.objects.create(detail_content=data, detail_host_id='%s' % id)
             return True
         except:
             return False
