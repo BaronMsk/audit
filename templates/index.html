@@ -10,7 +10,7 @@
       <th>Date</th>
       <th>Type</th>
       <th>Status</th>
-      <th></th>
+      <th>Action</th>
     </tr>
     </thead>
       <tbody>
@@ -20,7 +20,8 @@
         <td><a href="/host/{{host.pk}}">{{host.host_address}}</a></td>
         <td>{{host.host_data_create}}</td>
         <td>{{host.host_type}}</td>
-        <td>{{host.host_status}} <a href="./" ><span class="glyphicon glyphicon-remove" aria-hidden="true"> </span></a> <a href="./" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a> </td>
+        <td>{{host.host_status}}</td>
+        <td><a href="/dell/{{host.pk}}" ><span class="glyphicon glyphicon-remove" style="margin-right: 10px;" aria-hidden="true"> </span></a> <a href="/play/{{host.pk}}" ><span class="glyphicon glyphicon-play" aria-hidden="true"></span></a> </td>
       </tr>
   {% endfor %}
     </tbody>

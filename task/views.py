@@ -13,6 +13,21 @@ def index(request):
     })
     return HttpResponse(template.render(context))
 
+def delete_host(request, id):
+    d = Host().dell(id)
+    if d == True:
+        return HttpResponseRedirect('../')
+    else:
+        return HttpResponseRedirect('./error/')
+
+def play_host(request, id):
+    d = Host().play(id)
+    if d == True:
+        return HttpResponseRedirect('../')
+    else:
+        return HttpResponseRedirect('./error/')
+
+
 def host(request,*args, **kwargs):
     id = args
     details_list = HostDetails.objects.filter(detail_host_id='%s' % id)[:10]
