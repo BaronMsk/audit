@@ -31,6 +31,7 @@ def play_host(request, id):
 def host(request,*args, **kwargs):
     id = args
     details_list = Vulnerability.objects.filter(host_id='%s' % id)
+    details_list = details_list.distinct()
     template = loader.get_template('details.html')
     context = Context({
         'details_list': details_list,

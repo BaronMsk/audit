@@ -5,14 +5,14 @@
   <thead>
     <tr>
       <th>Programm</th>
-      <th>Detail</th>
+      <th>CVE</th>
     </tr>
   </thead>
     <tbody>
 {%for details in details_list%}
   <tr>
-    <td>{{details.programm}}</td>
-    <td>{{details.url}}</td>
+    <td><a href="{{details.url}}" target="_blank">{{details.programm}}</a></td>
+    <td>{{details.cve_list}}</td>
   </tr>
 {%endfor%}
   </tbody>

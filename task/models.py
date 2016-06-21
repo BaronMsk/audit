@@ -32,8 +32,6 @@ class Host(models.Model):
             ip = Host.objects.filter(pk='%s' % id).values('host_address')
             ip = ip[0]['host_address']
             data = get_info_freebsd(ip)
-            datas = data.split('\n')
-            HostDetails.objects.create(detail_content=datas, detail_host_id='%s' % id)
             data = data.split('\n\n')
             for i in data:
                 result = get_prog(i)
@@ -42,7 +40,9 @@ class Host(models.Model):
                 else:
                     programm_d = result[0]
                     www_d = result[1]
-                    Vulnerability.objects.create(programm=programm_d, url=www_d, host_id=id)
+                    cve_d = result[2][0:]
+                    cve_d = ', '.join(cve_d)
+                    Vulnerability.objects.create(programm=programm_d, url=www_d, host_id=id, cve_list=cve_d)
             return True
         except:
             return False
@@ -59,3 +59,4 @@ class Vulnerability(models.Model):
     programm = models.TextField(max_length=1000)
     url = models.TextField(max_length=1000)
     host_id = models.ImageField()
+    cve_list = models.TextField(max_length=65000, blank=True)
