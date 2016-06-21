@@ -1,4 +1,5 @@
 import paramiko
+import re
 
 
 def get_info_freebsd(host):
@@ -10,8 +11,40 @@ def get_info_freebsd(host):
         client.connect(host, username=USER, key_filename=KEY)
         stdin, stdout, stderr = client.exec_command('pkg audit')
         data = stdout.read() + stderr.read()
-        report = "\r%s%s \r" % (host, data)
+        report = "%s" % (data)
         client.close()
         return report
     except:
         return host + 'Error connect'
+
+
+def get_prog(data):
+    datas = data.split('\n')
+    for i in datas:
+        try:
+            found = re.search(r'is vulnerable:', i)
+            if found:
+                programm = i.split()[0]
+            found = re.search(r'^WWW:', i)
+            if found:
+                www = i.split()[1]
+            found = re.search(r'^CVE:', i)
+            if found:
+                cve = i.split()[1]
+            return programm, www
+        except:
+            continue
+
+
+
+            # data = get_info_freebsd('10.1.12.120')
+
+
+            # data = data.split('\n\n')
+
+            # for i in data:
+            #    result = get_prog(i)
+            #    if result == None:
+            #        continue
+            #    else:
+            #        print result

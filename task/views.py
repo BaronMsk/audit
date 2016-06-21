@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from task.models import Host, HostDetails
+from task.models import Host, HostDetails, Vulnerability
 from django.template import Context, loader
 from task.forms import HostF
 
@@ -30,7 +30,7 @@ def play_host(request, id):
 
 def host(request,*args, **kwargs):
     id = args
-    details_list = HostDetails.objects.filter(detail_host_id='%s' % id)[:10]
+    details_list = Vulnerability.objects.filter(host_id='%s' % id)
     template = loader.get_template('details.html')
     context = Context({
         'details_list': details_list,

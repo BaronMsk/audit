@@ -13,7 +13,6 @@ class Host(models.Model):
     host_status = models.TextField(max_length=20)
 
     def __unicode__(self):
-        #return u"%s %s %s %s %s %s" % self.host_name, self.host_address, self.host_type, self.host_status, self.host_data_create, self.pk
         return self.host_address
 
     def get_absolute_url(self):
@@ -29,11 +28,21 @@ class Host(models.Model):
 
     def play(self, id):
         try:
+            Vulnerability.objects.filter(host_id='%s' % id).delete()
             ip = Host.objects.filter(pk='%s' % id).values('host_address')
             ip = ip[0]['host_address']
-            print ip
             data = get_info_freebsd(ip)
-            HostDetails.objects.create(detail_content=data, detail_host_id='%s' % id)
+            datas = data.split('\n')
+            HostDetails.objects.create(detail_content=datas, detail_host_id='%s' % id)
+            data = data.split('\n\n')
+            for i in data:
+                result = get_prog(i)
+                if result == None:
+                    continue
+                else:
+                    programm_d = result[0]
+                    www_d = result[1]
+                    Vulnerability.objects.create(programm=programm_d, url=www_d, host_id=id)
             return True
         except:
             return False
@@ -46,5 +55,7 @@ class HostDetails(models.Model):
         return u"%s %s" % self.detail_data_audit, self.detail_content
 
 
-
-
+class Vulnerability(models.Model):
+    programm = models.TextField(max_length=1000)
+    url = models.TextField(max_length=1000)
+    host_id = models.ImageField()
