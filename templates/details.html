@@ -12,7 +12,12 @@
 {%for details in details_list%}
   <tr>
     <td><a href="{{details.url}}" target="_blank">{{details.programm}}</a></td>
-    <td>{{details.cve_list}}</td>
+    <td>{%if details.cve_list%}
+      {{details.cve_list}}
+      {% else %}
+      <p>No CVE</p>
+      {%endif%}
+    </td>
   </tr>
 {%endfor%}
   </tbody>
