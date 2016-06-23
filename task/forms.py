@@ -34,7 +34,7 @@ class HostF(forms.Form):
 
     def clean_hoststatus(self):
         hoststatus = self.cleaned_data['hoststatus']
-        p = re.compile('(^enabled$|^desabled$)')
+        p = re.compile('(^Internal$|^External$)')
         if hoststatus is not None and p.match(hoststatus):
             return hoststatus
         else:

@@ -22,9 +22,10 @@
         <td>{{host.host_type}}</td>
         <td>{{host.host_status}}</td>
         <td><a href="/dell/{{host.pk}}"><span class="glyphicon glyphicon-remove"
-                                              style="margin-right: 10px; color: #000;" aria-hidden="true"> </span></a>
+                                              style="margin-right: 10px; color: #000;" aria-hidden="true"
+                                              alt="Удалить из списка"> </span></a>
           <a href="/play/{{host.pk}}"><span class="glyphicon glyphicon-play" aria-hidden="true"
-                                            style="color: #000;"></span></a></td>
+                                            style="color: #000;" alt="Запустить"></span></a></td>
       </tr>
   {% endfor %}
     </tbody>

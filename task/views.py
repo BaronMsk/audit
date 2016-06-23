@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from task.models import Host, HostDetails, Vulnerability
+from task.models import Host, HostDetails
 from django.template import Context, loader
 from task.forms import HostF
 
@@ -23,15 +23,15 @@ def delete_host(request, id):
 def play_host(request, id):
     d = Host().play(id)
     if d == True:
+        Host().get_info_vulners(id)
         return HttpResponseRedirect('../')
     else:
         return HttpResponseRedirect('./error/')
 
 
-def host(request,*args, **kwargs):
+def host(request, *args):
     id = args
-    details_list = Vulnerability.objects.filter(host_id='%s' % id)
-    details_list = details_list.distinct()
+    details_list = HostDetails().detail_content(id)
     template = loader.get_template('details.html')
     context = Context({
         'details_list': details_list,
