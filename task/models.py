@@ -20,10 +20,10 @@ class Host(models.Model):
     def get_absolute_url(self):
         return '/host/%d' % self.pk
 
-    def dell(self, id):
+    def delete(self, id):
         try:
             Host.objects.filter(pk='%s' % id).delete()
-            HostDetails.objects.filter(detail_host_id='%s' % id).delete()
+            Vulnerability.objects.filter(host_id='%s' % id).delete()
             return True
         except:
             return False
@@ -46,7 +46,6 @@ class Host(models.Model):
                         CVEdetails.objects.create(cve=i, description=description_d, score=score_d)
                     else:
                         result = CVEdetails.objects.filter(cve=i).values()
-                        print result
 
 
         else:
@@ -76,25 +75,29 @@ class Host(models.Model):
             return False
 
 
-class HostDetails(models.Model):
-    detail_content = models.TextField(max_length=65000)
-    detail_host_id = models.TextField(max_length=20)
-    detail_date_audit = models.DateField(auto_now=True)
-    def __unicode__(self):
-        return u"%s %s" % self.detail_data_audit, self.detail_content
-
-    def detail_content(self, id):
-        details_list = Vulnerability.objects.filter(host_id='%s' % id)
-        details_list = details_list.distinct()
-        return details_list
-
-
 class Vulnerability(models.Model):
     programm = models.TextField(max_length=1000)
     url = models.TextField(max_length=1000)
     host_id = models.ImageField()
     cve_list = models.TextField(max_length=65000, blank=True)
 
+    def detail_content(self, id):
+        details_list = Vulnerability.objects.filter(host_id='%s' % id)
+        details_list = details_list.distinct()
+        return details_list
+
+    def get_all_cve(self, id):
+        all_cve_list = []
+        all_cve = Vulnerability.objects.filter(host_id='%s' % id).values('cve_list')
+        for i in all_cve:
+            all_cve_list += [i['cve_list']]
+        return all_cve_list
+
+    def get_all_vulnerability(self, cve_id):
+        all_vulnerability = []
+        for i in cve_id.split(','):
+            all_vulnerability = CVEdetails.objects.filter(cve=i).values('description', 'score', 'cve')
+            return all_vulnerability
 
 class CVEdetails(models.Model):
     cve = models.TextField(max_length=65000)

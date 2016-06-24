@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block score %}
+{%if result_vul%}
+<table class="table table-hover">
+    <thead>
+    <tr>
+        <th>Vulnerability</th>
+        <th>Severity</th>
+        <th>CVE</th>
+    </tr>
+    </thead>
+    <tbody>
+    {%for details in result_vul%}
+    <tr>
+        {%for str in details%}
+        <td>{{str.description}}</td>
+        <td>{{str.score}}</td>
+        <td>{{str.cve}}</td>
+        {%endfor%}
+    </tr>
+    {%endfor%}
+    </tbody>
+</table>
+{% else %}
+<p>No Host are available.</p>
+{%endif%}
+{% endblock %}

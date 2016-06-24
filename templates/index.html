@@ -17,13 +17,13 @@
     {% for host in host_list %}
       <tr>
         <td><a href="/host/{{host.pk}}">{{host.host_name}}</a></td>
-        <td><a href="/host/{{host.pk}}">{{host.host_address}}</a></td>
+        <td><a href="/score/{{host.pk}}">{{host.host_address}}</a></td>
         <td>{{host.host_data_create}}</td>
         <td>{{host.host_type}}</td>
         <td>{{host.host_status}}</td>
-        <td><a href="/dell/{{host.pk}}"><span class="glyphicon glyphicon-remove"
-                                              style="margin-right: 10px; color: #000;" aria-hidden="true"
-                                              alt="Удалить из списка"> </span></a>
+        <td><a href="/del/{{host.pk}}"><span class="glyphicon glyphicon-remove"
+                                             style="margin-right: 10px; color: #000;" aria-hidden="true"
+                                             alt="Удалить из списка"> </span></a>
           <a href="/play/{{host.pk}}"><span class="glyphicon glyphicon-play" aria-hidden="true"
                                             style="color: #000;" alt="Запустить"></span></a></td>
       </tr>
