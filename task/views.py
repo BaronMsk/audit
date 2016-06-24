@@ -63,6 +63,7 @@ def score(request, *args):
     result_vul = []
     for i in d:
         result_vul += [Vulnerability().get_all_vulnerability(i)]
+    print result_vul
     template = loader.get_template('score.html')
     context = Context({
         'result_vul': result_vul,

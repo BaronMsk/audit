@@ -95,9 +95,10 @@ class Vulnerability(models.Model):
 
     def get_all_vulnerability(self, cve_id):
         all_vulnerability = []
-        for i in cve_id.split(','):
-            all_vulnerability = CVEdetails.objects.filter(cve=i).values('description', 'score', 'cve')
-            return all_vulnerability
+        cve_one_id = cve_id.split(',')
+        for i in cve_one_id:
+            all_vulnerability += CVEdetails.objects.filter(cve=i).values('description', 'score', 'cve')
+        return all_vulnerability
 
 class CVEdetails(models.Model):
     cve = models.TextField(max_length=65000)
