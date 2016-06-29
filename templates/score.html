@@ -2,12 +2,12 @@
 {% block score %}
 {%if result_vul%}
 
-<table class="table table-hover">
+<table class="table table-hover sortable">
     <thead>
     <tr>
         <th>Vulnerability</th>
-        <th>Severity</th>
-        <th>CVE</th>
+        <th data-defaultsort="desc">Severity</th>
+        <th data-defaultsort="desc">CVE</th>
     </tr>
     </thead>
     <tbody>
@@ -15,8 +15,8 @@
     {%for str in details%}
     <tr>
         <td>{{str.description}}</td>
-        <td>{{str.score}}</td>
-        <td>{{str.cve}}</td>
+        <td width="8%">{{str.score}}</td>
+        <td width="15%">{{str.cve}}</td>
     </tr>
     {%endfor%}
     </tbody>
