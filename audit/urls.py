@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^score/(\d+)$', views.score, name='score'),
     url(r'^create_host$', views.create_host, name='create_host'),
     url(r'^add$', views.host_add, name='host_add'),
+    url(r'^dashboard$', views.dashboard, name='dashboard'),
 ]

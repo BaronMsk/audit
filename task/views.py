@@ -63,9 +63,20 @@ def score(request, *args):
     result_vul = []
     for i in d:
         result_vul += [Vulnerability().get_all_vulnerability(i)]
+    host_info = Vulnerability().get_host_info(id)
     template = loader.get_template('score.html')
     context = Context({
         'result_vul': result_vul,
+        'host_info': host_info,
 
+    })
+    return HttpResponse(template.render(context))
+
+
+def dashboard(request, *args):
+    dash_result = []
+    template = loader.get_template('dashboard.html')
+    context = Context({
+        'dash_result': dash_result,
     })
     return HttpResponse(template.render(context))

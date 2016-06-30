@@ -21,12 +21,10 @@ class Host(models.Model):
         return '/host/%d' % self.pk
 
     def delete(self, id):
-        try:
-            Host.objects.filter(pk='%s' % id).delete()
-            Vulnerability.objects.filter(host_id='%s' % id).delete()
-            return True
-        except:
-            return False
+        Host.objects.filter(pk='%s' % id).delete()
+        Vulnerability.objects.filter(host_id='%s' % id).delete()
+        return True
+
 
     def get_info_vulners(self, id):
         found_cve_todb = Vulnerability.objects.filter(host_id='%s' % id).values('cve_list')
@@ -100,7 +98,12 @@ class Vulnerability(models.Model):
             all_vulnerability += CVEdetails.objects.filter(cve=i).values('description', 'score', 'cve')
         return all_vulnerability
 
+    def get_host_info(self, id):
+        result = Host.objects.filter(pk='%s' % id).values('host_name')
+        return result
+
+
 class CVEdetails(models.Model):
-    cve = models.TextField(max_length=65000)
+    cve = models.TextField(max_length=65000, db_index=True)
     description = models.TextField(max_length=65000)
     score = models.DecimalField(max_digits=5, decimal_places=1)
