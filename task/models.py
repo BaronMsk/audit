@@ -1,5 +1,5 @@
 from __future__ import unicode_literals
-from django.db import models
+from django.db import models, connection
 from get_port_audit import *
 from vulners_api import *
 
@@ -101,6 +101,28 @@ class Vulnerability(models.Model):
     def get_host_info(self, id):
         result = Host.objects.filter(pk='%s' % id).values('host_name')
         return result
+
+    def get_dash_info(self, id):
+
+        def dictfetchall(cursor):
+            "Returns all rows from a cursor as a dict"
+            desc = cursor.description
+            return [
+                dict(zip([col[0] for col in desc], row))
+                for row in cursor.fetchall()
+                ]
+
+        id_l = str(id)
+        like = str('%')
+        cursor = connection.cursor()
+        sql = """SELECT cv.score, v.host_id, v.programm, th.host_name  FROM audit.task_cvedetails as cv LEFT JOIN audit.task_vulnerability as v ON v.cve_list LIKE concat(%s, cv.cve, %s) left join task_host as th on v.host_id=th.id WHERE cv.score >='7.5' AND v.host_id = %s ORDER BY cv.score DESC"""
+        cursor.execute(sql, [like, like, id_l])
+        # data = cursor.fetchall()
+        data = dictfetchall(cursor)
+        print data
+        return data
+
+
 
 
 class CVEdetails(models.Model):

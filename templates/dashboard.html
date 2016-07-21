@@ -1,7 +1,30 @@
 {% extends 'base.html' %}
 {% block dashboard %}
 {%if dash_result%}
-{{dash_result}}
+<table class="table table-hover sortable">
+    <thead>
+    <tr>
+        <th>Host</th>
+        <th>Score</th>
+        <th>Programm</th>
+    </tr>
+    </thead>
+    <tbody>
+    {%for host_n in dash_result%}
+    {%for l in host_n%}
+    <tr>
+        <td>
+            {{l.host_name}}
+        </td>
+        <td>
+            {{l.score}}
+        </td>
+        <td>
+            {{l.programm}}
+        </td>
+    </tr>
+    {%endfor%}
+    {%endfor%}
 {%else%}
 <p>Not result</p>
 {%endif%}

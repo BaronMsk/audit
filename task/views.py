@@ -76,6 +76,10 @@ def score(request, *args):
 def dashboard(request, *args):
     dash_result = []
     template = loader.get_template('dashboard.html')
+    host_list = Host.objects.filter().values('id')
+    for i in host_list:
+        id = i['id']
+        dash_result += [Vulnerability().get_dash_info(id)]
     context = Context({
         'dash_result': dash_result,
     })
