@@ -115,9 +115,10 @@ class Vulnerability(models.Model):
         id_l = str(id)
         like = str('%')
         cursor = connection.cursor()
-        sql = """SELECT cv.score, v.host_id, v.programm, th.host_name  FROM audit.task_cvedetails as cv LEFT JOIN audit.task_vulnerability as v ON v.cve_list LIKE concat(%s, cv.cve, %s) left join task_host as th on v.host_id=th.id WHERE cv.score >='7.5' AND v.host_id = %s ORDER BY cv.score DESC"""
+        sql = """SELECT cv.score, v.host_id, v.programm, th.host_name, COUNT(*) as "count_rows"  FROM audit.task_cvedetails as cv LEFT JOIN audit.task_vulnerability as v ON v.cve_list LIKE concat(%s, cv.cve, %s) left join task_host as th on v.host_id=th.id WHERE cv.score >='7.5' AND v.host_id = %s ORDER BY cv.score DESC"""
         cursor.execute(sql, [like, like, id_l])
         data = dictfetchall(cursor)
+        print data
         return data
 
 

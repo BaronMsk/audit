@@ -4,25 +4,22 @@
 <table class="table table-hover sortable">
     <thead>
     <tr>
-        <th>Host</th>
-        <th>Score</th>
-        <th>Programm</th>
+        <th data-defaultsort='disabled'>Host Name</th>
+        <th>Vulnerable packages</th>
     </tr>
     </thead>
     <tbody>
     {%for host_n in dash_result%}
-    {%for l in host_n%}
+    {%for l in host_n %}
     <tr>
         <td>
-            {{l.host_name}}
+            <a href="../score/{{l.host_id}}">{{l.host_name}}</a>
         </td>
         <td>
-            {{l.score}}
-        </td>
-        <td>
-            {{l.programm}}
+            {{l.count_rows}}
         </td>
     </tr>
+
     {%endfor%}
     {%endfor%}
 {%else%}
