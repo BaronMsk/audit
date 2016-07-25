@@ -9,8 +9,9 @@
     </tr>
     </thead>
     <tbody>
-    {%for host_n in dash_result%}
-    {%for l in host_n %}
+    {%for l in dash_result %}
+    {%if l.count_rows == 0 %}
+    {%else%}
     <tr>
         <td>
             <a href="../score/{{l.host_id}}">{{l.host_name}}</a>
@@ -19,8 +20,7 @@
             {{l.count_rows}}
         </td>
     </tr>
-
-    {%endfor%}
+    {%endif%}
     {%endfor%}
 {%else%}
 <p>Not result</p>
