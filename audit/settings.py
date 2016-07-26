@@ -81,7 +81,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'audit',
         'USER': 'root',
-        'HOST': '127.0.0.1',
+        'HOST': 'localhost',
     }
 }
 
