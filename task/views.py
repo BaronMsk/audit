@@ -80,7 +80,6 @@ def dashboard(request, *args):
     for i in host_list:
         id = i['id']
         dash_result += [Vulnerability().get_dash_info(id)]
-    print dash_result
     context = Context({
         'dash_result': dash_result,
     })
