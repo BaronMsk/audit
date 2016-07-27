@@ -1,5 +1,7 @@
 import paramiko
 import re
+import traceback
+import logging
 
 
 def get_info_freebsd(host):
@@ -14,8 +16,11 @@ def get_info_freebsd(host):
         report = "%s" % (data)
         client.close()
         return report
-    except:
-        return host + 'Error connect'
+    except paramiko.ssh_exception.SSHException as (errno, strerror):
+        return host + 'SSH Connect Error [' + errno + ']: "' + strerror + '"'
+    except Exception as e:
+        logging.error(traceback.format_exc())
+        # Logs the error appropriately.
 
 
 def get_prog(data):
