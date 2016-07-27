@@ -1,8 +1,7 @@
 # audit
 Install 
 
-pip install django
-pip install paramico
+pip install django paramico
 manage.py makemigrations
 manage.py migrate
 
