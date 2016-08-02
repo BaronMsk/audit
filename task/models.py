@@ -57,6 +57,8 @@ class Host(models.Model):
             ip = Host.objects.filter(pk='%s' % id).values('host_address')
             ip = ip[0]['host_address']
             data = get_info_freebsd(ip)
+            if data == "NotKeyPassword":
+                return "NotKeyPassword"
             data = data.split('\n\n')
             for i in data:
                 result = get_prog(i)

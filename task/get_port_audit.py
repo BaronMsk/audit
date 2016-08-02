@@ -2,15 +2,31 @@ import paramiko
 import re
 import traceback
 import logging
+from django.db import connection
+
+
+def get_rsa_password():
+    cursor = connection.cursor()
+    sql = """SELECT id_rsa_pass FROM id_rsa"""
+    cursor.execute(sql)
+    data = cursor.fetchone()
+    return data
+
 
 
 def get_info_freebsd(host):
+    KeyPassword = get_rsa_password()
+
+    if KeyPassword is None:
+        return "NotKeyPassword"
+
+
     USER = 'zhukov'
-    KEY = '/home/baron/.ssh/id_rsa'
+    KEY = '/var/www/audit/id_rsa.encrypted.key'
     try:
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        client.connect(host, username=USER, key_filename=KEY)
+        client.connect(host, username=USER, key_filename=KEY, password=KeyPassword[0])
         stdin, stdout, stderr = client.exec_command('pkg audit')
         data = stdout.read() + stderr.read()
         report = "%s" % (data)

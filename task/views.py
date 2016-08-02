@@ -26,6 +26,8 @@ def play_host(request, id):
         Host().get_info_vulners(id)
         host_url = '/host/' + id
         return HttpResponseRedirect(host_url)
+    if d == "NotKeyPassword":
+        return HttpResponseRedirect('../key.html')
     else:
         return HttpResponseRedirect('./error/')
 
@@ -84,3 +86,8 @@ def dashboard(request, *args):
         'dash_result': dash_result,
     })
     return HttpResponse(template.render(context))
+
+
+def key(request, *args):
+    template = loader.get_template('key.html')
+    return HttpResponse(template.render())
