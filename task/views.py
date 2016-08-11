@@ -23,7 +23,6 @@ def delete_host(request, id):
 def play_host(request, id):
     d = Host().play(id)
     if d == True:
-        Host().get_info_vulners(id)
         host_url = '/host/' + id
         return HttpResponseRedirect(host_url)
     if d == "NotKeyPassword":

@@ -35,13 +35,17 @@ class Host(models.Model):
                 for i in cve_list:
                     found_cve_todb = CVEdetails.objects.filter(cve='%s' % i).values('cve')
                     if not found_cve_todb:  # if not found then create to db
-                        va = VulnersApi()
-                        result = va.get_vulners_info(i)
-                        description_d = result[0]
-                        score_d = result[1]
-                        if description_d == 'Not found':
+                        result = VulnersApi().get_vulners_info_freebsd(i)
+                        if result[0] == u'APIError':
+                            print result
                             continue
-                        CVEdetails.objects.create(cve=i, description=description_d, score=score_d)
+                        elif result[0] == u'NotFound':
+                            print result
+                            continue
+                        else:
+                            description_d = result[0]
+                            score_d = result[1]
+                            CVEdetails.objects.create(cve=i, description=description_d, score=score_d)
                     else:
                         result = CVEdetails.objects.filter(cve=i).values()
 
@@ -52,27 +56,38 @@ class Host(models.Model):
 
 
     def play(self, id):
+        Vulnerability.objects.filter(host_id='%s' % id).delete()
+        host_info = Host.objects.filter(pk='%s' % id).values('host_address', 'host_type')
         try:
-            Vulnerability.objects.filter(host_id='%s' % id).delete()
-            ip = Host.objects.filter(pk='%s' % id).values('host_address')
-            ip = ip[0]['host_address']
-            data = get_info_freebsd(ip)
-            if data == "NotKeyPassword":
-                return "NotKeyPassword"
-            data = data.split('\n\n')
-            for i in data:
-                result = get_prog(i)
-                if result == None:
-                    continue
-                else:
-                    programm_d = result[0]
-                    www_d = result[1]
-                    cve_d = result[2][0:]
-                    cve_d = ','.join(cve_d)
-                    Vulnerability.objects.create(programm=programm_d, url=www_d, host_id=id, cve_list=cve_d)
+            ip_h = host_info[0]['host_address']
+            type_h = host_info[0]['host_type']
+            data = get_info_host(ip_h,type_h)
+            if data == u'NotKeyPassword':
+                return u'NotKeyPassword'
+            if type_h == u'FreeBSD':
+                data = data.split('\n\n')
+                for i in data:
+                    result = get_prog(i)
+                    if result == None:
+                        continue
+                    else:
+                        programm_d = result[0]
+                        www_d = result[1]
+                        cve_d = result[2][0:]
+                        cve_d = ','.join(cve_d)
+                        Vulnerability.objects.create(programm=programm_d, url=www_d, host_id=id, cve_list=cve_d)
+                        Host().get_info_vulners(id)
+                return True
+            elif type_h == u'Linux':
+                dsa = auditSystem(data.splitlines())
+                if dsa is not None:
+                    for d in dsa:
+                        Vulnerability.objects.create(host_id=id, cve_list=d)
+                        Host().get_info_vulners(id)
             return True
         except:
             return False
+
 
 
 class Vulnerability(models.Model):

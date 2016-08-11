@@ -2,8 +2,15 @@ import paramiko
 import re
 import traceback
 import logging
+import json
+import urllib2
+
 from django.db import connection
 
+USER = 'zhukov'
+KEY = '/var/www/audit/id_rsa.encrypted.key'
+VULNERS_LINKS = {'pkgChecker': 'https://vulners.com/api/v3/audit/audit/',
+                 'bulletin': 'https://vulners.com/api/v3/search/id/?id=%s&references=True'}
 
 def get_rsa_password():
     cursor = connection.cursor()
@@ -14,20 +21,18 @@ def get_rsa_password():
 
 
 
-def get_info_freebsd(host):
+def get_info_host(host, type):
     KeyPassword = get_rsa_password()
-
     if KeyPassword is None:
-        return "NotKeyPassword"
-
-
-    USER = 'zhukov'
-    KEY = '/var/www/audit/id_rsa.encrypted.key'
+        return u'NotKeyPassword'
     try:
         client = paramiko.SSHClient()
         client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         client.connect(host, username=USER, key_filename=KEY, password=KeyPassword[0])
-        stdin, stdout, stderr = client.exec_command('pkg audit')
+        if type == u'FreeBSD':
+            stdin, stdout, stderr = client.exec_command('pkg audit')
+        elif type == u'Linux':
+            stdin, stdout, stderr = client.exec_command("dpkg-query -W -f='${Package} ${Version} ${Architecture}\n'")
         data = stdout.read() + stderr.read()
         report = "%s" % (data)
         client.close()
@@ -56,3 +61,24 @@ def get_prog(data):
             return programm, www, cve
         except:
             continue
+
+
+
+def auditSystem(data):
+    dsa = u'NotFoundVulDpkg'
+    installedPackages = data
+    # Get vulnerability information
+    payload = {'os':'debian',
+               'version':'8',
+               'package':installedPackages}
+    req = urllib2.Request(VULNERS_LINKS.get('pkgChecker'))
+    req.add_header('Content-Type', 'application/json')
+    binary_data = (json.dumps(payload)).encode('utf8')
+    response = urllib2.urlopen(req, binary_data)
+    responseData = response.read()
+    if isinstance(responseData, bytes):
+        responseData = responseData.decode('utf8')
+    responseData = json.loads(responseData)
+    dsa = (responseData.get('data').get('vulnerabilities'))
+    return dsa
+
