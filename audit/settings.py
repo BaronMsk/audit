@@ -130,3 +130,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     #'/var/www/static/',
 ]
+
+SSH_AUTH = [
+    {'USER': 'zhukov'},
+    {'KEY': '/var/www/audit/id_rsa.encrypted.key'},
+]

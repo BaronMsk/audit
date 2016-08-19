@@ -4,11 +4,17 @@ import traceback
 import logging
 import json
 import urllib2
-
 from django.db import connection
+from django.conf import settings
 
-USER = 'zhukov'
-KEY = '/var/www/audit/id_rsa.encrypted.key'
+
+def getConfig(key, default):
+    getattr(settings, key, default)
+
+
+USER = getConfig('USER', 1)
+KEY = getConfig('KEY', 1)
+
 VULNERS_LINKS = {'pkgChecker': 'https://vulners.com/api/v3/audit/audit/',
                  'bulletin': 'https://vulners.com/api/v3/search/id/?id=%s&references=True'}
 
@@ -18,8 +24,6 @@ def get_rsa_password():
     cursor.execute(sql)
     data = cursor.fetchone()
     return data
-
-
 
 def get_info_host(host, type):
     KeyPassword = get_rsa_password()
@@ -63,7 +67,7 @@ def get_prog(data):
             continue
 
 
-
+# __author__ = 'isox'
 def auditSystem(data):
     dsa = u'NotFoundVulDpkg'
     installedPackages = data

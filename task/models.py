@@ -31,28 +31,22 @@ class Host(models.Model):
         if found_cve_todb:  # found cve
             for f in found_cve_todb:
                 cve_list = f['cve_list']
-                cve_list = cve_list.split(',')
-                for i in cve_list:
-                    found_cve_todb = CVEdetails.objects.filter(cve='%s' % i).values('cve')
-                    if not found_cve_todb:  # if not found then create to db
-                        result = VulnersApi().get_vulners_info_freebsd(i)
-                        if result[0] == u'APIError':
-                            print result
-                            continue
-                        elif result[0] == u'NotFound':
-                            print result
-                            continue
+                cve_list_t = cve_list.split(',')
+                resultVulInfo = VulnersApi().getAllCveInfo(cve_list_t)
+                if resultVulInfo:
+                    for n in resultVulInfo['documents']:
+                        id = n
+                        description = resultVulInfo['documents'][id]['description']
+                        score = resultVulInfo['documents'][id]['cvss']['score']
+                        found_cve_cach = CVEdetails.objects.filter(cve='%s' % id).values('cve')
+                        if not found_cve_cach:
+                            print n + " Create"
+                            CVEdetails.objects.create(cve=n, description=description, score=score)
                         else:
-                            description_d = result[0]
-                            score_d = result[1]
-                            CVEdetails.objects.create(cve=i, description=description_d, score=score_d)
-                    else:
-                        result = CVEdetails.objects.filter(cve=i).values()
-
-
-        else:
-            ##if id host not found
-            return None
+                            print n + " Not Create"
+                            continue
+                else:
+                    print 'Not Data VulnersInfo'
 
 
     def play(self, id):
@@ -76,14 +70,14 @@ class Host(models.Model):
                         cve_d = result[2][0:]
                         cve_d = ','.join(cve_d)
                         Vulnerability.objects.create(programm=programm_d, url=www_d, host_id=id, cve_list=cve_d)
-                        Host().get_info_vulners(id)
+                Host().get_info_vulners(id)
                 return True
             elif type_h == u'Linux':
                 dsa = auditSystem(data.splitlines())
                 if dsa is not None:
                     for d in dsa:
                         Vulnerability.objects.create(host_id=id, cve_list=d)
-                        Host().get_info_vulners(id)
+                    Host().get_info_vulners(id)
             return True
         except:
             return False
