@@ -7,13 +7,9 @@ import urllib2
 from django.db import connection
 from django.conf import settings
 
+USER = getattr(settings, 'SSH_USER', None)
+KEY = getattr(settings, 'SSH_KEY', None)
 
-def getConfig(key, default):
-    getattr(settings, key, default)
-
-
-USER = getConfig('USER', 1)
-KEY = getConfig('KEY', 1)
 
 VULNERS_LINKS = {'pkgChecker': 'https://vulners.com/api/v3/audit/audit/',
                  'bulletin': 'https://vulners.com/api/v3/search/id/?id=%s&references=True'}
@@ -27,7 +23,7 @@ def get_rsa_password():
 
 def get_info_host(host, type):
     KeyPassword = get_rsa_password()
-    if KeyPassword is None:
+    if not KeyPassword:
         return u'NotKeyPassword'
     try:
         client = paramiko.SSHClient()

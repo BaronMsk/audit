@@ -131,7 +131,11 @@ STATICFILES_DIRS = [
     #'/var/www/static/',
 ]
 
-SSH_AUTH = [
-    {'USER': 'zhukov'},
-    {'KEY': '/var/www/audit/id_rsa.encrypted.key'},
-]
+# SSH_AUTH = [
+#    {'SSH_USER': 'ansible'},
+#    {'SSH_KEY': '/var/www/audit/id_rsa.encrypted.key'},
+# ]
+SSH_USER = 'zhukov'
+SSH_KEY = '/var/www/audit/id_rsa.encrypted.key'
+
+###openssl enc -aes-256-ctr -in id_rsa -out id_rsa.enc

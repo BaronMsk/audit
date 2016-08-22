@@ -79,7 +79,8 @@ class Host(models.Model):
                         Vulnerability.objects.create(host_id=id, cve_list=d)
                     Host().get_info_vulners(id)
             return True
-        except:
+        except Exception as e:
+            logging.error(traceback.format_exc())
             return False
 
 
