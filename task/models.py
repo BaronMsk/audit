@@ -58,6 +58,8 @@ class Host(models.Model):
             data = get_info_host(ip_h,type_h)
             if data == u'NotKeyPassword':
                 return u'NotKeyPassword'
+            elif data == u'BadAuthentication':
+                return u'BadAuthentication'
             if type_h == u'FreeBSD':
                 data = data.split('\n\n')
                 for i in data:

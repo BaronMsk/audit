@@ -27,5 +27,5 @@ urlpatterns = [
     url(r'^create_host$', views.create_host, name='create_host'),
     url(r'^add$', views.host_add, name='host_add'),
     url(r'^dashboard$', views.dashboard, name='dashboard'),
-    url(r'^key.html$', views.key, name='key'),
+    url(r'^error.html$', views.key, name='key'),
 ]

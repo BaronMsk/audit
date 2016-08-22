@@ -37,8 +37,8 @@ def get_info_host(host, type):
         report = "%s" % (data)
         client.close()
         return report
-    except paramiko.ssh_exception.SSHException as (errno, strerror):
-        return host + 'SSH Connect Error [' + errno + ']: "' + strerror + '"'
+    except paramiko.BadAuthenticationType:
+        return u'BadAuthentication'
     except Exception as e:
         logging.error(traceback.format_exc())
         # Logs the error appropriately.

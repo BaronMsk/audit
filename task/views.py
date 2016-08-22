@@ -21,12 +21,18 @@ def delete_host(request, id):
         return HttpResponseRedirect('./error/')
 
 def play_host(request, id):
-    d = Host().play(id)
-    if d == True:
+    status_task = Host().play(id)
+    template = loader.get_template('error.html')
+    context = Context({
+        'status_task': status_task,
+    })
+    if status_task == True:
         host_url = '/host/' + id
         return HttpResponseRedirect(host_url)
-    if d == "NotKeyPassword":
-        return HttpResponseRedirect('../key.html')
+    elif status_task == u"NotKeyPassword":
+        return HttpResponse(template.render(context))
+    elif status_task == u'BadAuthentication':
+        return HttpResponse(template.render(context))
     else:
         return HttpResponseRedirect('./error/')
 

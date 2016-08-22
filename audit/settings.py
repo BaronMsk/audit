@@ -131,10 +131,6 @@ STATICFILES_DIRS = [
     #'/var/www/static/',
 ]
 
-# SSH_AUTH = [
-#    {'SSH_USER': 'ansible'},
-#    {'SSH_KEY': '/var/www/audit/id_rsa.encrypted.key'},
-# ]
 SSH_USER = 'zhukov'
 SSH_KEY = '/var/www/audit/id_rsa.encrypted.key'
 
